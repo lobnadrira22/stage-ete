@@ -3,10 +3,11 @@ package com.example.projet.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.projet.entities.OffreEmploi;
 import com.example.projet.repos.OffreEmploiRepository;
-
+@Service
 public class OffreEmploiServiceImpl implements OffreEmploiService{
 	@Autowired
 	OffreEmploiRepository offrerep;

@@ -1,6 +1,6 @@
 package com.example.projet.entities;
 
-import java.util.Collection;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +17,7 @@ public class Candidat {
 	private String numtel;
 	private String email;
 	private String mdp;
-	private Collection<String> dossier;
+	private String dossier;
 	private Long cin;
 	private String CV;
 	public Candidat() {
@@ -25,7 +25,7 @@ public class Candidat {
 		// TODO Auto-generated constructor stub
 	}
 	public Candidat(String nom, String prenom, String photo, String numtel, String email, String mdp,
-			Collection<String> dossier, Long cin, String cV) {
+			String dossier, Long cin, String cV) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
@@ -79,10 +79,10 @@ public class Candidat {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
-	public Collection<String> getDossier() {
+	public String getDossier() {
 		return dossier;
 	}
-	public void setDossier(Collection<String> dossier) {
+	public void setDossier(String dossier) {
 		this.dossier = dossier;
 	}
 	public Long getCin() {

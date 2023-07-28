@@ -1,11 +1,12 @@
 package com.example.projet.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.projet.entities.Candidat;
 import com.example.projet.repos.CandidatRepository;
 
-
+@Service
 public class CandidatServiceImpl implements CandidatService{
 	@Autowired
 	CandidatRepository candidateRepo;
