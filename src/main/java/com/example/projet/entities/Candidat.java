@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 @Entity
 public class Candidat {
 	@Id
@@ -104,7 +105,14 @@ public class Candidat {
 	}
 	
 	
+	@OneToOne(mappedBy = "candidat")
+	private Candidature candidature;
 	
+	public void setCandidature(Candidature candidature) {
+	    this.candidature = candidature;
+	}
+
+
 	
 
 }

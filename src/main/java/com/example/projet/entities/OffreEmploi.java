@@ -1,11 +1,16 @@
 package com.example.projet.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 @Entity
 public class OffreEmploi {
 	@Id
@@ -53,9 +58,37 @@ public class OffreEmploi {
 		return "OffreEmploi [id=" + id + ", nom=" + nom + ", description=" + description + ", dateexpiration="
 				+ dateexpiration + "]";
 	}
+	@ManyToOne // This establishes the many-to-one relationship
+    private Employeur employeur; // Reference to the employer managing this job offer
+
+    // Constructors, getters, setters, and other methods (omitted for brevity)
+
+    // Add the following method to manage the relationship
+    public void setEmployeur(Employeur employeur) {
+        this.employeur = employeur;
+    }
+    public Employeur getEmployeur() {
+        return employeur;
+    }
+
 	
-	
-	
+    @OneToMany(mappedBy = "offreEmploi", cascade = CascadeType.ALL)
+    private List<Candidature> candidatures;
+    public void addCandidature(Candidature candidature) {
+        if (candidatures == null) {
+            candidatures = new ArrayList<>();
+        }
+        candidatures.add(candidature);
+        candidature.setOffreEmploi(this);
+    }
+
+    public void removeCandidature(Candidature candidature) {
+        if (candidatures != null) {
+            candidatures.remove(candidature);
+            candidature.setOffreEmploi(null);
+        }
+    }
+
 	
 	
 }

@@ -11,16 +11,34 @@ import com.example.projet.repos.OffreEmploiRepository;
 public class OffreEmploiServiceImpl implements OffreEmploiService{
 	@Autowired
 	OffreEmploiRepository offrerep;
+	  @Autowired
+	    EmployeurService employeurService; // Ajoutez cette dépendance
 	@Override
-	public OffreEmploi saveOffre(OffreEmploi offre) {
-		// TODO Auto-generated method stub
-		return offrerep.save(offre);
-	}
+    public OffreEmploi saveOffre(OffreEmploi offre) {
+        // Assurez-vous que l'offre a une référence valide vers un employeur existant
+        if (offre.getEmployeur() != null) {
+            // Vérifiez si l'employeur existe dans la base de données
+            int employeurId = offre.getEmployeur().getIdEmployeur();
+            if (employeurService.getEmployee(employeurId) == null) {
+                // Si l'employeur n'existe pas, sauvegardez-le d'abord.
+                // Notez que cela peut ne pas être nécessaire selon votre logique d'application.
+                employeurService.saveEmployee(offre.getEmployeur());
+            }
+        }
+        return offrerep.save(offre);
+    }
 
-	@Override
-	public OffreEmploi updateOffre(OffreEmploi offre) {
-		return offrerep.save(offre);
-	}
+	 @Override
+	    public OffreEmploi updateOffre(OffreEmploi offre) {
+	        // Assurez-vous que l'offre a une référence valide vers un employeur existant
+	        if (offre.getEmployeur() != null) {
+	            int employeurId = offre.getEmployeur().getIdEmployeur();
+	            if (employeurService.getEmployee(employeurId) == null) {
+	                employeurService.saveEmployee(offre.getEmployeur());
+	            }
+	        }
+	        return offrerep.save(offre);
+	    }
 
 	@Override
 	public void deleteOffre(OffreEmploi offre) {

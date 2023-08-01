@@ -1,9 +1,15 @@
 package com.example.projet.entities;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Employeur {
@@ -73,6 +79,29 @@ public String toString() {
 	return "Employeur [idEmployeur=" + idEmployeur + ", nom=" + nom + ", prenom=" + prenom + ", nomentreprise="
 			+ nomentreprise + ", email=" + email + ", mdp=" + mdp + "]";
 }
+@OneToMany(mappedBy = "employeur") // This establishes the one-to-many relationship
+@JsonIgnore // To prevent infinite recursion in JSON serialization (optional)
+private Set<OffreEmploi> offres;
+
+// Constructors, getters, setters, and other methods (omitted for brevity)
+
+// Add the following method to manage the relationship
+public void addOffreEmploi(OffreEmploi offreEmploi) {
+    offres.add(offreEmploi);
+    offreEmploi.setEmployeur(this);
+}
 
 
+@ManyToOne // This establishes the many-to-one relationship
+private Admin admin;// Reference to the employer managing this job offer
+
+// Constructors, getters, setters, and other methods (omitted for brevity)
+
+// Add the following method to manage the relationship
+public void setAdmin(Admin admin){
+    this.admin = admin;
+}
+public Admin getAdmin() {
+    return admin;
+}
 }

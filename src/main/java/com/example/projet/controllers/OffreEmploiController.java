@@ -7,8 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.projet.entities.Employeur;
 import com.example.projet.entities.OffreEmploi;
 import com.example.projet.services.OffreEmploiService;
+
+import jakarta.persistence.ManyToOne;
 
 @RestController
 @RequestMapping("/api/offres")
@@ -65,4 +68,7 @@ public class OffreEmploiController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @ManyToOne
+    private Employeur emp;
 }

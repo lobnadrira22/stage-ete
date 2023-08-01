@@ -2,7 +2,9 @@ package com.example.projet.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.projet.entities.Admin;
 import com.example.projet.entities.Employeur;
+import com.example.projet.services.AdminService;
 import com.example.projet.services.EmployeurService;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +14,29 @@ import java.util.Map;
 
 public class EmployeurController {
 	  private final EmployeurService employeurService;
+	    private final AdminService adminService; // Ajoutez l'attribut pour AdminService
+
 
 	    @Autowired
-	    public EmployeurController(EmployeurService employeurService) {
+	    public EmployeurController(EmployeurService employeurService,AdminService adminService) {
 	        this.employeurService = employeurService;
+	        this.adminService = adminService;
 	    }
 
 	    @PostMapping
-	    public Employeur createEmployeur(@RequestBody Employeur employeur) {
+	    public Employeur createEmployeur(@RequestBody Employeur employeur, @RequestParam("adminId") Long adminId) {
+	        Admin admin = adminService.getAdmin(adminId);
+
+	        if (admin == null) {
+	            throw new RuntimeException("Administrateur introuvable avec l'ID spécifié : " + adminId);
+	        }
+
+	        employeur.setAdmin(admin);
+
 	        return employeurService.saveEmployee(employeur);
 	    }
+
+
 
 	    @PatchMapping("/{id}")
 	    public Employeur updateEmployeur(@PathVariable int id, @RequestBody Map<String, String> updates) {
