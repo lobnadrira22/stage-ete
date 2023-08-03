@@ -1,9 +1,12 @@
 package com.example.projet.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.projet.entities.Admin;
 import com.example.projet.entities.Employeur;
+import com.example.projet.entities.OffreEmploi;
 import com.example.projet.services.AdminService;
 import com.example.projet.services.EmployeurService;
 import java.util.List;
@@ -23,19 +26,21 @@ public class EmployeurController {
 	        this.adminService = adminService;
 	    }
 
+
+
 	    @PostMapping
-	    public Employeur createEmployeur(@RequestBody Employeur employeur, @RequestParam("adminId") Long adminId) {
-	        Admin admin = adminService.getAdmin(adminId);
+	    public ResponseEntity<Employeur> createEmployeur(@RequestBody Employeur employeur) {
+	        // Enregistrez d'abord l'administrateur en base de données
+	        Admin admin = adminService.saveAdmin(employeur.getAdmin());
 
-	        if (admin == null) {
-	            throw new RuntimeException("Administrateur introuvable avec l'ID spécifié : " + adminId);
-	        }
-
+	        // Associez l'administrateur persistant à l'employeur
 	        employeur.setAdmin(admin);
 
-	        return employeurService.saveEmployee(employeur);
-	    }
+	        // Enregistrez ensuite l'employeur en base de données
+	        Employeur emp = employeurService.saveEmployee(employeur);
 
+	        return ResponseEntity.status(HttpStatus.CREATED).body(emp);
+	    }
 
 
 	    @PatchMapping("/{id}")
