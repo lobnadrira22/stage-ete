@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projet.entities.Admin;
-
 import com.example.projet.repos.AdminRepository;
 
 @Service
@@ -54,7 +53,21 @@ public class AdminServiceImpl implements AdminService{
 		return null;
 	}
 
+	@Override
+	public Admin loginAdmin(String email, String password) {
+		Admin adm = adminrep.findByEmail(email);
+		if (adm != null && adm.getPassword().equals(password)) {
+            return adm; /* Authentification réussie, renvoie le candidat */
+        }
 
+        return null; /* Authentification échouée */
+	}
+
+	
+    @Override
+	public boolean emailExists(String email) {
+		 return adminrep.findByEmail(email) != null;
+	}
 
 	
 

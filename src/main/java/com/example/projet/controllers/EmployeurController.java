@@ -1,17 +1,21 @@
 package com.example.projet.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.projet.entities.Admin;
+import com.example.projet.entities.Candidat;
 import com.example.projet.entities.Employeur;
 import com.example.projet.entities.OffreEmploi;
 import com.example.projet.services.AdminService;
 import com.example.projet.services.EmployeurService;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/employeurs")
 
@@ -30,13 +34,7 @@ public class EmployeurController {
 
 	    @PostMapping
 	    public ResponseEntity<Employeur> createEmployeur(@RequestBody Employeur employeur) {
-	        // Enregistrez d'abord l'administrateur en base de données
-	        Admin admin = adminService.saveAdmin(employeur.getAdmin());
-
-	        // Associez l'administrateur persistant à l'employeur
-	        employeur.setAdmin(admin);
-
-	        // Enregistrez ensuite l'employeur en base de données
+	       
 	        Employeur emp = employeurService.saveEmployee(employeur);
 
 	        return ResponseEntity.status(HttpStatus.CREATED).body(emp);
@@ -66,18 +64,52 @@ public class EmployeurController {
 	        return employeurService.updateEmployee(employeur);
 	    }
 	    @DeleteMapping("/{id}")
-	    public void deleteEmployeur(@PathVariable int id) {
-	        employeurService.deleteEmployeeById(id);
+	    public ResponseEntity<Void> deleteEmployeur(@PathVariable int id) {
+	    	  
+	    	        Employeur emp = employeurService.getEmployee(id);
+	    	        if (emp != null) {
+	    	        	employeurService.deleteEmployeeById(id);
+	    	            return ResponseEntity.noContent().build();
+	    	        } else {
+	    	            return ResponseEntity.notFound().build();
+	    	        }
 	    }
 
 	    @GetMapping("/{id}")
-	    public Employeur getEmployeur(@PathVariable int id) {
-	        return employeurService.getEmployee(id);
+	        public ResponseEntity<Employeur> getEmployeur(@PathVariable int id) {
+	            Employeur emp = employeurService.getEmployee(id);
+	            if (emp != null) {
+	                return ResponseEntity.ok(emp);
+	            } else {
+	                return ResponseEntity.notFound().build();
+	            }
 	    }
 
 	    @GetMapping
 	    public List<Employeur> getAllEmployeurs() {
 	        return employeurService.getAllEmployees();
 	    }
+	    
+
+	    @GetMapping("/login")
+	    public ResponseEntity<Map<String, String>> loginEmployeur(@RequestBody Map<String, String> requestParams) {
+	        String email = requestParams.get("email");
+	        String mdp = requestParams.get("mdp");
+
+	        Employeur emp = employeurService.loginEmployeur(email, mdp);
+
+	        if (emp != null) {
+	            // Authentification réussie, renvoyer un message "Vous êtes connecté"
+	            Map<String, String> response = new HashMap<>();
+	            response.put("message", "Vous êtes connecté");
+	            return ResponseEntity.ok(response);
+	        } else {
+	            // Authentification échouée, renvoyer un message "Essayez encore"
+	            Map<String, String> response = new HashMap<>();
+	            response.put("message", "Essayez encore");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	        }
+	    }
+	    
 
 }

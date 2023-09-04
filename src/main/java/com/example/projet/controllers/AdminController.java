@@ -1,15 +1,16 @@
 package com.example.projet.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.projet.entities.Admin;
 import com.example.projet.entities.Employeur;
 import com.example.projet.services.AdminService;
-import com.example.projet.services.EmployeurService;
-import java.util.List;
-import java.util.Map;
 
+import java.util.HashMap;
+import java.util.Map;
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/admin")
 
@@ -34,7 +35,7 @@ public class AdminController {
 	            return ResponseEntity.notFound().build();
 	        }
 
-	        // Mettre à jour les champs spécifiés dans le corps de la requête (dans le Map "updates")
+	        
 	        if (updates.containsKey("email")) {
 	            admin.setEmail(updates.get("email"));
 	        }
@@ -57,5 +58,25 @@ public class AdminController {
 	    public List<Employeur> getAllEmployeurs() {
 	        return employeurService.getAllEmployees();
 	    } */
+	    
+	    @GetMapping("/login")
+	    public ResponseEntity<Map<String, String>> loginAdmin(@RequestBody Map<String, String> requestParams) {
+	        String email = requestParams.get("email");
+	        String password = requestParams.get("password");
+
+	        Admin adm = adminservice.loginAdmin(email, password);
+
+	        if (adm != null) {
+	            // Authentification réussie, renvoyer un message "Vous êtes connecté"
+	            Map<String, String> response = new HashMap<>();
+	            response.put("message", "Vous êtes connecté");
+	            return ResponseEntity.ok(response);
+	        } else {
+	            // Authentification échouée, renvoyer un message "Essayez encore"
+	            Map<String, String> response = new HashMap<>();
+	            response.put("message", "Essayez encore");
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+	        }
+	    }
 
 }

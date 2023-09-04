@@ -2,11 +2,17 @@ package com.example.projet.entities;
 
 
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+
 @Entity
 public class Candidat {
 	@Id
@@ -15,17 +21,17 @@ public class Candidat {
 	private String nom;
 	private String prenom;
 	private String photo;
-	private String numtel;
+	private int numtel;
 	private String email;
 	private String mdp;
-	private String dossier;
+	private String domaine;
 	private Long cin;
-	private String CV;
+	
 	public Candidat() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Candidat(String nom, String prenom, String photo, String numtel, String email, String mdp,
+	public Candidat(String nom, String prenom, String photo, int numtel, String email, String mdp,
 			String dossier, Long cin, String cV) {
 		super();
 		this.nom = nom;
@@ -34,9 +40,9 @@ public class Candidat {
 		this.numtel = numtel;
 		this.email = email;
 		this.mdp = mdp;
-		this.dossier = dossier;
+		
 		this.cin = cin;
-		CV = cV;
+		
 	}
 	public int getId() {
 		return id;
@@ -62,10 +68,10 @@ public class Candidat {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	public String getNumtel() {
+	public int getNumtel() {
 		return numtel;
 	}
-	public void setNumtel(String numtel) {
+	public void setNumtel(int numtel) {
 		this.numtel = numtel;
 	}
 	public String getEmail() {
@@ -80,37 +86,47 @@ public class Candidat {
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
 	}
-	public String getDossier() {
-		return dossier;
-	}
-	public void setDossier(String dossier) {
-		this.dossier = dossier;
-	}
+	
 	public Long getCin() {
 		return cin;
 	}
 	public void setCin(Long cin) {
 		this.cin = cin;
 	}
-	public String getCV() {
-		return CV;
+	
+	public void setDomaine(String domaine) {
+		this.domaine = domaine;
 	}
-	public void setCV(String cV) {
-		CV = cV;
+	public String getDomaine() {
+		return domaine;
 	}
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Candidat [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", photo=" + photo + ", numtel=" + numtel
-				+ ", email=" + email + ", mdp=" + mdp + ", dossier=" + dossier + ", cin=" + cin + ", CV=" + CV + "]";
+				+ ", email=" + email + ", mdp=" + mdp + ", domaine=" + domaine + ", cin=" + cin + ", candidatures="
+				+ candidatures + "]";
+	}
+
+
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "candidat")
+	private Set<Candidature> candidatures;
+	
+	public void addCandidature(Candidature candidature) {
+	    candidatures.add(candidature);
+	    candidature.setCandidat(this);
+	}
+	public Set<Candidature> getCandidatures() {
+		return candidatures;
+	}
+	public void setCandidatures(Set<Candidature> candidatures) {
+		this.candidatures = candidatures;
 	}
 	
-	
-	@OneToOne(mappedBy = "candidat")
-	private Candidature candidature;
-	
-	public void setCandidature(Candidature candidature) {
-	    this.candidature = candidature;
-	}
 
 
 	

@@ -2,8 +2,10 @@ package com.example.projet.services;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.example.projet.entities.Employeur;
 import com.example.projet.repos.EmployeurRepository;
@@ -47,6 +49,24 @@ public class EmployeurServiceImpl implements EmployeurService {
 	public List<Employeur> getAllEmployees() {
 		
 		return emprep.findAll();
+	}
+
+	@Override
+	public Employeur loginEmployeur(String email, String mdp) {
+		 /* Rechercher le candidat par son email dans la base de données */
+        Employeur emp = emprep.findByEmail(email);
+
+        /* Vérifier si le candidat existe et si le mot de passe est correct */
+        if (emp != null && emp.getMdp().equals(mdp)) {
+            return emp; /* Authentification réussie, renvoie le candidat */
+        }
+
+        return null; /* Authentification échouée */
+	}
+
+	@Override
+	public boolean emailExists(String email) {
+		 return emprep.findByEmail(email) != null;
 	}
 
 }

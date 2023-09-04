@@ -12,16 +12,15 @@ public class OffreEmploiServiceImpl implements OffreEmploiService{
 	@Autowired
 	OffreEmploiRepository offrerep;
 	  @Autowired
-	    EmployeurService employeurService; // Ajoutez cette dépendance
+	    EmployeurService employeurService; 
 	@Override
     public OffreEmploi saveOffre(OffreEmploi offre) {
-        // Assurez-vous que l'offre a une référence valide vers un employeur existant
+    
         if (offre.getEmployeur() != null) {
             // Vérifiez si l'employeur existe dans la base de données
             int employeurId = offre.getEmployeur().getIdEmployeur();
             if (employeurService.getEmployee(employeurId) == null) {
-                // Si l'employeur n'existe pas, sauvegardez-le d'abord.
-                // Notez que cela peut ne pas être nécessaire selon votre logique d'application.
+               
                 employeurService.saveEmployee(offre.getEmployeur());
             }
         }
@@ -30,7 +29,7 @@ public class OffreEmploiServiceImpl implements OffreEmploiService{
 
 	 @Override
 	    public OffreEmploi updateOffre(OffreEmploi offre) {
-	        // Assurez-vous que l'offre a une référence valide vers un employeur existant
+	    
 	        if (offre.getEmployeur() != null) {
 	            int employeurId = offre.getEmployeur().getIdEmployeur();
 	            if (employeurService.getEmployee(employeurId) == null) {
@@ -50,11 +49,11 @@ public class OffreEmploiServiceImpl implements OffreEmploiService{
 	public void deleteOffreById(int id) {
 		offrerep.deleteById(id);		
 	}
-
 	@Override
 	public OffreEmploi getOffre(int id) {
-		return offrerep.findById(id).get();
+	    return offrerep.findById(id).get();
 	}
+
 
 	@Override
 	public List<OffreEmploi> getAllOffres() {

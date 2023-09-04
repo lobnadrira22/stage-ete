@@ -2,6 +2,7 @@ package com.example.projet.services;
 
 import java.util.List;
 
+
 import com.example.projet.entities.Employeur;
 
 public interface EmployeurService {
@@ -11,5 +12,7 @@ public interface EmployeurService {
 	void deleteEmployeeById(int id);
 	Employeur getEmployee(int id);
 	List<Employeur> getAllEmployees();
+	Employeur loginEmployeur(String email, String mdp);
+	public boolean emailExists(String email);
 
 }

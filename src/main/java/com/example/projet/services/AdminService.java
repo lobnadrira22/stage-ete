@@ -16,6 +16,8 @@ public interface AdminService {
 		Admin getAdmin(Long adminId);
 		List<Admin> getAllAdmins();
 		Admin getAdmin(int id);
+		Admin loginAdmin(String email, String password);
+		public boolean emailExists(String email);
 
 	
 

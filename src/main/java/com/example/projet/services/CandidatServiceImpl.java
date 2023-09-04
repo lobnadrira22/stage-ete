@@ -1,9 +1,14 @@
 package com.example.projet.services;
 
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import com.example.projet.entities.Candidat;
+
 import com.example.projet.repos.CandidatRepository;
 
 @Service
@@ -11,14 +16,19 @@ public class CandidatServiceImpl implements CandidatService{
 	@Autowired
 	CandidatRepository candidateRepo;
 	@Override
+	
+	
 	public Candidat saveCandidat(Candidat candidat) {
 		
 		return candidateRepo.save(candidat);
 	}
+	
+	
+	
 
 	@Override
 	public void registerCandidat(Candidat candidat) {
-		/* Effectuer les contrôles de saisie */
+		/* les contrôles de saisie */
         if (candidat.getNom() == null || candidat.getPrenom() == null ||
             candidat.getEmail() == null || candidat.getMdp() == null) {
             throw new IllegalArgumentException("Tous les champs obligatoires doivent être renseignés.");
@@ -32,12 +42,14 @@ public class CandidatServiceImpl implements CandidatService{
             throw new IllegalArgumentException("Le mot de passe doit comporter au moins 8 caractères.");
         }
 
+        //String hashedPassword = passwordEncoder.encode(candidat.getMdp());
+        //candidat.setMdp(hashedPassword);
         /* Appeler la méthode saveCandidat pour enregistrer le candidat dans la base de données */
         candidateRepo.save(candidat);
         
     }
 	private boolean isValidEmail(String email) {
-        /* Votre logique de validation d'email ici */
+       
         return true; /* Retourne true si l'email est valide, sinon false */
     }
 
@@ -53,5 +65,43 @@ public class CandidatServiceImpl implements CandidatService{
 
         return null; /* Authentification échouée */
     }
+
+	@Override
+	public Candidat updateProfileCandidat(Candidat candidat) {
+		
+
+		    return candidateRepo.save(candidat);
+		
+
+	}
+
+	@Override
+	public Candidat postuler(Candidat candidat) {
+		// TODO Auto-generated method stub
+		return candidateRepo.save(candidat);
+	}
+
+
+
+
+	@Override
+	public List<Candidat> getAllcandidats() {
+		// TODO Auto-generated method stub
+		return candidateRepo.findAll();
+	}
+	
+	@Override
+	public Candidat getCandidat(int id) {
+	    return candidateRepo.findById(id).get();
+	}
+
+
+
+
+	@Override
+	public boolean emailExists(String email) {
+	    return candidateRepo.findByEmail(email) != null;
+	}
+	
 
 }
